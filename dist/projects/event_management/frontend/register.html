@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Event - Register</title>
+  <style>
+    /* ===== Reset & Base Styling ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(-45deg, #8ec5fc, #e0c3fc, #f093fb, #f5576c);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    /* ===== Container & Header ===== */
+    .container {
+      max-width: 480px;
+      margin: 50px auto;
+      padding: 30px 30px 18px 30px;
+      background: #fff;
+      box-shadow: 0 8px 32px rgba(106,90,205,0.18), 0 1.5px 8px rgba(0,0,0,0.08);
+      border-radius: 18px;
+      position: relative;
+      transition: 0.25s;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      color: #1e88e5;
+      font-weight: 700;
+    }
+
+    .home-btn {
+      background: #1e88e5;
+      color: white;
+      padding: 8px 14px;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    .form-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 12px;
+      background: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    p {
+      text-align: center;
+    }
+
+    p a {
+      color: #1e88e5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="brand">Event Management</span>
+      <a href="index.html" class="home-btn">Home</a>
+    </div>
+
+    <div class="form-box">
+      <h2>User Registration</h2>
+
+      <label>Full Name</label>
+      <div class="input-group">
+        <input type="text" id="regUsername" placeholder="Enter full name" required />
+      </div>
+
+      <label>Email</label>
+      <div class="input-group">
+        <input type="email" id="regEmail" placeholder="Email" required />
+      </div>
+
+      <label>Phone</label>
+      <div class="input-group">
+        <input type="tel" id="regPhone" placeholder="Enter phone" required />
+      </div>
+
+      <label>Password</label>
+      <div class="input-group">
+        <input type="password" id="regPassword" placeholder="Enter password" required />
+      </div>
+
+      <p>Already have an account? <a href="login.html">Login</a></p>
+      <button id="registerBtn">Register</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("registerBtn").addEventListener("click", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("regUsername").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const contact = document.getElementById("regPhone").value.trim();
+      const password = document.getElementById("regPassword").value;
+
+      if (!name || !email || !contact || !password) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      // validate phone number
+      if (!/^\d{10}$/.test(contact)) {
+        alert("Phone number must be exactly 10 digits.");
+        return;
+      }
+
+      const res = await fetch("/event-api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, contact, password })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message);
+        return;
+      }
+
+      // animated popup success
+      const successDiv = document.createElement("div");
+      successDiv.style.position = "fixed";
+      successDiv.style.top = "50%";
+      successDiv.style.left = "50%";
+      successDiv.style.transform = "translate(-50%, -50%)";
+      successDiv.style.background = "#fff";
+      successDiv.style.padding = "36px 48px";
+      successDiv.style.borderRadius = "18px";
+      successDiv.style.boxShadow = "0 8px 32px rgba(30,136,229,0.18)";
+      successDiv.innerHTML = `
+        <div style="font-size:2.5rem;">🎉</div>
+        <div style="font-size:1.3rem;font-weight:600;margin-top:10px;">
+          Registration Successful!
+        </div>
+      `;
+      document.body.appendChild(successDiv);
+
+      setTimeout(() => {
+        successDiv.remove();
+        window.location.href = "login.html";
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maternal Health Risk Dashboard</title>
+    <style>
+      :root {
+        --bg: #07111f;
+        --panel: rgba(255, 255, 255, 0.08);
+        --panel-strong: rgba(255, 255, 255, 0.14);
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+        --accent: #38bdf8;
+        --accent-2: #f472b6;
+        --good: #34d399;
+        --warn: #fbbf24;
+        --danger: #fb7185;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top left, #12304c, var(--bg));
+        color: var(--text);
+        min-height: 100vh;
+        padding: 24px;
+      }
+      .dashboard {
+        max-width: 1120px;
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+      }
+      .hero, .card {
+        background: var(--panel);
+        border: 1px solid var(--panel-strong);
+        border-radius: 22px;
+        box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+        backdrop-filter: blur(10px);
+      }
+      .hero {
+        padding: 28px 30px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.7rem, 2.5vw, 2.3rem);
+      }
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 680px;
+        line-height: 1.6;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(56, 189, 248, 0.16);
+        color: #d9f8ff;
+        font-weight: 600;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .stat-card {
+        background: rgba(255,255,255,0.1);
+        border-radius: 18px;
+        padding: 16px;
+        border: 1px solid rgba(255,255,255,0.12);
+      }
+      .stat-card .label { color: var(--muted); font-size: 0.9rem; }
+      .stat-card .value { font-size: 1.2rem; margin-top: 6px; font-weight: 700; }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+      }
+      .card { padding: 22px; }
+      .card h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.1rem; }
+      .bar-row { display: grid; grid-template-columns: 90px 1fr 48px; align-items: center; gap: 10px; margin: 10px 0; }
+      .bar {
+        height: 10px;
+        background: rgba(255,255,255,0.12);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .bar > span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+      }
+      .bar.low > span { background: linear-gradient(90deg, var(--good), #2dd4bf); }
+      .bar.mid > span { background: linear-gradient(90deg, var(--warn), #f59e0b); }
+      .bar.high > span { background: linear-gradient(90deg, var(--danger), #f43f5e); }
+      .signal-list { padding-left: 18px; color: var(--muted); line-height: 1.7; }
+      .signal-list strong { color: var(--text); }
+      form { display: grid; gap: 12px; }
+      .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      label {
+        display: grid;
+        gap: 6px;
+        font-weight: 600;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      input {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.16);
+        background: rgba(255,255,255,0.08);
+        color: var(--text);
+      }
+      button {
+        padding: 11px 16px;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .result {
+        margin-top: 12px;
+        padding: 16px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.08);
+      }
+      .result.good { border: 1px solid rgba(52, 211, 153, 0.3); }
+      .result.warn { border: 1px solid rgba(251, 191, 36, 0.28); }
+      .result.danger { border: 1px solid rgba(251, 113, 133, 0.28); }
+      .result h4 { margin: 0 0 6px; }
+      .result p { margin: 0; color: var(--muted); line-height: 1.6; }
+      @media (max-width: 860px) {
+        .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 560px) {
+        .row { grid-template-columns: 1fr; }
+        .stats { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <section class="hero">
+        <div>
+          <div class="pill">Maternal Health Risk Dashboard</div>
+          <h1>INTERACTIVE VIEW OF THE MATERNAL HEALTH ANALYSIS</h1>
+          <p>
+            This preview highlights the same patterns from the notebook analysis: risk distribution,
+            the strongest warning signals, and an instant risk prediction based on the recorded clinical values.
+          </p>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat-card">
+          <div class="label">Cases reviewed</div>
+          <div class="value">1,014</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Low risk</div>
+          <div class="value">406</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Mid risk</div>
+          <div class="value">336</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">High risk</div>
+          <div class="value">272</div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h3>Risk distribution</h3>
+          <div class="bar-row"><span>Low</span><div class="bar low"><span style="width:40%"></span></div><b>40%</b></div>
+          <div class="bar-row"><span>Mid</span><div class="bar mid"><span style="width:33%"></span></div><b>33%</b></div>
+          <div class="bar-row"><span>High</span><div class="bar high"><span style="width:27%"></span></div><b>27%</b></div>
+          <p style="color: var(--muted); margin-top: 14px; line-height: 1.6;">
+            The analysis shows a meaningful share of high-risk cases, so routine monitoring and follow-up remain essential.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Key warning signals</h3>
+          <ul class="signal-list">
+            <li><strong>Blood sugar</strong> shows the strongest influence on the risk score.</li>
+            <li><strong>Heart rate</strong> and <strong>blood pressure</strong> are also strong indicators.</li>
+            <li><strong>Body temperature</strong> can raise concern when it moves above the typical range.</li>
+            <li><strong>Baseline accuracy</strong> from the notebook-style model was about <strong>65%</strong>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Predict maternal health risk</h3>
+        <form id="riskForm">
+          <div class="row">
+            <label>Age
+              <input id="age" type="number" min="10" max="80" value="28" required>
+            </label>
+            <label>Systolic BP
+              <input id="systolic" type="number" min="70" max="180" value="120" required>
+            </label>
+          </div>
+          <div class="row">
+            <label>Diastolic BP
+              <input id="diastolic" type="number" min="40" max="120" value="80" required>
+            </label>
+            <label>Blood Sugar
+              <input id="bs" type="number" min="4" max="25" value="8" step="0.1" required>
+            </label>
+          </div>
+          <div class="row">
+            <label>Body Temperature
+              <input id="temp" type="number" min="95" max="105" value="98.5" step="0.1" required>
+            </label>
+            <label>Heart Rate
+              <input id="heart" type="number" min="40" max="120" value="74" required>
+            </label>
+          </div>
+          <button type="submit">Check risk</button>
+        </form>
+
+        <div id="resultBox" class="result">
+          <h4>Ready to estimate</h4>
+          <p>Enter clinical values to see the dashboard’s risk assessment.</p>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const means = {
+        age: 29.87,
+        systolic: 113.2,
+        diastolic: 76.46,
+        bs: 8.73,
+        temp: 98.67,
+        heart: 74.3
+      };
+      const stds = {
+        age: 13.47,
+        systolic: 18.4,
+        diastolic: 13.89,
+        bs: 3.29,
+        temp: 1.37,
+        heart: 8.09
+      };
+
+      function zscore(value, mean, std) {
+        return std ? (value - mean) / std : 0;
+      }
+
+      function getRisk(values) {
+        const score =
+          0.85 * zscore(values.age, means.age, stds.age) +
+          1.2 * zscore(values.systolic, means.systolic, stds.systolic) +
+          1.1 * zscore(values.diastolic, means.diastolic, stds.diastolic) +
+          1.45 * zscore(values.bs, means.bs, stds.bs) +
+          0.9 * zscore(values.temp, means.temp, stds.temp) +
+          1.0 * zscore(values.heart, means.heart, stds.heart);
+
+        if (score > 0.75) {
+          return {
+            label: 'High risk',
+            tone: 'danger',
+            message: 'This profile is moving toward a high-risk range. Immediate medical review is recommended.'
+          };
+        }
+        if (score > 0.1) {
+          return {
+            label: 'Mid risk',
+            tone: 'warn',
+            message: 'This profile needs closer monitoring and follow-up because several indicators are above the normal range.'
+          };
+        }
+        return {
+          label: 'Low risk',
+          tone: 'good',
+          message: 'This profile is within a generally safer range, though routine checks remain important.'
+        };
+      }
+
+      const form = document.getElementById('riskForm');
+      const resultBox = document.getElementById('resultBox');
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const values = {
+          age: Number(document.getElementById('age').value),
+          systolic: Number(document.getElementById('systolic').value),
+          diastolic: Number(document.getElementById('diastolic').value),
+          bs: Number(document.getElementById('bs').value),
+          temp: Number(document.getElementById('temp').value),
+          heart: Number(document.getElementById('heart').value)
+        };
+
+        const prediction = getRisk(values);
+        resultBox.className = `result ${prediction.tone}`;
+        resultBox.innerHTML = `
+          <h4>${prediction.label}</h4>
+          <p>${prediction.message}</p>
+        `;
+      });
+    </script>
+  </body>
+</html>

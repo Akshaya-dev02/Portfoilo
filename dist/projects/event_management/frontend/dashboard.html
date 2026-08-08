@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Events - Event Management</title>
+  <style>
+    /* --- General Styles --- */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      color: #1f2937;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    /* --- Header (Title + Go Back Button) --- */
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .back-home-btn {
+      background: #4f46e5;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .back-home-btn:hover {
+      background: #3730a3;
+    }
+
+    /* --- Event Form --- */
+    .event-form input,
+    .event-form textarea,
+    .event-form select,
+    .event-form button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .event-form button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .event-form button:hover {
+      background: #6366f1;
+    }
+
+    /* --- Event Cards --- */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .event-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .event-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .event-card h3 {
+      margin-top: 0;
+      color: #1f2937;
+    }
+
+    .event-card p {
+      margin: 5px 0;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ✅ Title and Go Back button on same line -->
+    <div class="header-row">
+      <h2>Add New Event</h2>
+      <a href="index.html" class="back-home-btn">⬅ Go Back to Home</a>
+    </div>
+
+    <!-- ✅ Add Event Form -->
+    <form id="addEventForm" class="event-form">
+      <input type="text" id="title" placeholder="Event Title" required>
+      <input type="date" id="date" required>
+      <input type="text" id="location" placeholder="Location" required>
+      <textarea id="description" placeholder="Event Description" required></textarea>
+
+      <!-- ✅ New: Decoration Selector -->
+      <label for="decoration">Select Decoration Style:</label>
+      <select id="decoration" required>
+        <option value="">-- Choose Decoration --</option>
+        <option value="wedding">Wedding Decor</option>
+        <option value="birthday">Birthday Party</option>
+        <option value="corporate">Corporate Event</option>
+        <option value="college">College Fest</option>
+        <option value="farewell">Farewell Party</option>
+        <option value="festival">Festival Theme</option>
+      </select>
+
+      <button type="submit">Add Event</button>
+
+      <!-- ✅ New: View Decoration Button -->
+      <button type="button" id="viewDecorBtn" style="background:#6197bd; margin-top:5px;">
+        View Decoration Ideas
+      </button>
+    </form>
+
+    <h2>Upcoming Events</h2>
+    <div id="eventsList" class="events-grid"></div>
+  </div>
+
+  <script>
+    const addEventForm = document.getElementById('addEventForm');
+    const eventsList = document.getElementById('eventsList');
+    const viewDecorBtn = document.getElementById('viewDecorBtn');
+
+    // ✅ Redirect to Decoration Page
+    viewDecorBtn.addEventListener('click', () => {
+      window.location.href = 'decoration.html';
+    });
+
+    // ✅ Load events from backend
+    async function loadEvents() {
+      try {
+        const res = await fetch('/event-api/events');
+        const events = await res.json();
+        eventsList.innerHTML = '';
+
+        if (!events.length) {
+          eventsList.innerHTML = "<p>No events found. Add one above!</p>";
+          return;
+        }
+
+        events.forEach(event => {
+          const card = document.createElement('div');
+          card.className = 'event-card';
+          card.innerHTML = `
+            <h3>${event.title}</h3>
+            <p><strong>Date:</strong> ${event.date}</p>
+            <p><strong>Location:</strong> ${event.location}</p>
+            <p><strong>Decoration:</strong> ${event.decoration || 'Not selected'}</p>
+            <p>${event.description}</p>
+          `;
+          eventsList.appendChild(card);
+        });
+      } catch (err) {
+        eventsList.innerHTML = "<p style='color:red;'>⚠️ Failed to load events. Make sure your backend is running.</p>";
+      }
+    }
+
+    // ✅ Add new event and redirect to home
+    if (addEventForm) {
+      addEventForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('title').value;
+        const date = document.getElementById('date').value;
+        const location = document.getElementById('location').value;
+        const description = document.getElementById('description').value;
+        const decoration = document.getElementById('decoration').value;
+
+        try {
+          const res = await fetch('/event-api/events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, date, location, description, decoration })
+          });
+          const data = await res.json();
+
+          alert(data.message || '🎉 Event added successfully!');
+          addEventForm.reset();
+          // ✅ Auto-fill decoration if selected from decoration page
+window.addEventListener('load', () => {
+  const savedDecor = localStorage.getItem('selectedDecoration');
+  if (savedDecor) {
+    document.getElementById('decoration').value = savedDecor;
+    localStorage.removeItem('selectedDecoration'); // clear after use
+  }
+});
+
+          // ✅ Redirect to home page after 1.5 seconds
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+
+        } catch (err) {
+          alert('❌ Error adding event. Please make sure the backend is running.');
+        }
+      });
+    }
+
+    // ✅ Load events on page load
+    window.onload = loadEvents;
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact - Event Management</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(-45deg, #8ec5fc, #e0c3fc, #f093fb, #f5576c);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .form-container {
+      max-width: 500px;
+      background: white;
+      padding: 40px;
+      margin: 60px auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* --- Header Row (Contact + Go Back Button) --- */
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header-row h2 {
+      margin: 0;
+      color: #1f2937;
+      font-weight: bold;
+    }
+
+    .back-home-btn {
+      text-decoration: none;
+      color: white;
+      background: #4f46e5;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .back-home-btn:hover {
+      background: #3730a3;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #6366f1;
+    }
+
+    #message {
+      margin-top: 10px;
+      color: green;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <!-- Header Row -->
+    <div class="header-row">
+      <h2>Contact</h2>
+      <a href="index.html" class="back-home-btn">⬅ Go Back Home</a>
+    </div>
+
+    <form id="contactForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <textarea id="messageText" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('message').textContent =
+        "✅ Thank you! Your message has been sent.";
+      contactForm.reset();
+    });
+  </script>
+</body>
+</html>

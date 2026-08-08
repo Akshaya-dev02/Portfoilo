@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Decorations - Event Management</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(-45deg, #8ec5fc, #e0c3fc, #f093fb, #f5576c);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .header-row h2 {
+      margin: 0;
+      color: #1f2937;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .back-home-btn {
+      text-decoration: none;
+      color: #fff;
+      background: #4f46e5;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .back-home-btn:hover {
+      background: #3730a3;
+    }
+
+    .decor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .decor-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .decor-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .decor-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .decor-card h3 {
+      margin: 15px;
+      color: #1f2937;
+    }
+
+    .decor-card p {
+      margin: 0 15px 20px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header-row">
+      <h2>Decoration Ideas</h2>
+      <a href="index.html" class="back-home-btn">⬅ Go Back Home</a>
+    </div>
+
+    <!-- Decoration Ideas -->
+    <div class="decor-grid">
+      <div class="decor-card">
+        <img src="wedding.jpeg" alt="Wedding Decor">
+        <h3>Elegant Wedding Setup</h3>
+        <p>Soft floral arrangements, and pastel lightings for a timeless wedding look.</p>
+      </div>
+      <div class="decor-card">
+        <img src="elegent wedding.jpeg" alt="Wedding Decor">
+        <h3>Wedding Theme</h3>
+        <p>Soft floral arrangements, and white drapes for a timeless wedding look.</p>
+      </div>
+      <div class="decor-card">
+        <img src="birthday.jpeg" alt="Birthday Party">
+        <h3>Birthday Bash</h3>
+        <p>Balloon arches, colorful themes, and confetti décor to celebrate birthdays in style.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="Birthday1.jpeg" alt="Birthday Party">
+        <h3>Birthday decor</h3>
+        <p>Balloon arches, colorful themes, and confetti décor to celebrate birthdays in style.</p>
+      </div>
+      <div class="decor-card">
+        <img src="Corporate Event.webp" alt="Corporate Event">
+        <h3>Corporate Event</h3>
+        <p>Professional ambience with clean lighting, stage setup, and elegant floral centerpieces.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="festival.jpeg" alt="Festival Theme">
+        <h3>Festival Theme</h3>
+        <p>Lanterns, rangoli, and cultural motifs for a vibrant and joyous festive setting.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="beach party.jpeg" alt="Beach Party">
+        <h3>Beach Party</h3>
+        <p>Beachside vibes with tiki torches, bamboo chairs, and string lights for a fun evening.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="Baby Shower.jpeg" alt="Baby Shower">
+        <h3>Baby Shower</h3>
+        <p>Pastel balloons, soft decorations, and themed props for an adorable baby celebration.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="farewell.jpeg" alt="Farewell Party">
+        <h3>Farewell Party</h3>
+        <p>Photo booths, fairy lights, and memory walls to make the farewell night memorable.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="cultural events.jpg" alt="Cultural Event">
+        <h3>Cultural Event</h3>
+        <p>Ethnic backdrops, traditional décor, and bright lighting for vibrant performances.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="SEMINAR.jpeg" alt="Seminar Setup">
+        <h3>Seminar Setup</h3>
+        <p>Professional projector arrangements, podiums, and floral desk décor for seminars.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="graduation.jpg" alt="Graduation Event">
+        <h3>Graduation Celebration</h3>
+        <p>Stage banners, academic colors, and seating decorations for graduation ceremonies.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80" alt="Open Mic Event">
+        <h3>Open Mic Night</h3>
+        <p>Neon lights, artistic décor, and stage mics for creative evening events.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="sports.jpeg" alt="Sports Day">
+        <h3>Sports Day Setup</h3>
+        <p>Flags, trophies, and stage décor that celebrate athletic spirit and teamwork.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="music.webp" alt="Music Concert">
+        <h3>Music Concert</h3>
+        <p>Stage lights, sound rigs, and colorful stage backgrounds for musical performances.</p>
+      </div>
+
+      <div class="decor-card">
+        <img src="art.jpeg" alt="Art Exhibition">
+        <h3>Art Exhibition</h3>
+        <p>Elegant lighting, framed artworks, and creative setups for artistic showcases.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Select all decor cards
+    document.querySelectorAll('.decor-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const selectedDecor = card.getAttribute('data-decor');
+        localStorage.setItem('selectedDecoration', selectedDecor);
+        alert(`Idea has been selected: ${selectedDecor}`);
+        window.location.href = 'dashboard.html';
+      });
+    });
+  </script>
+</body>
+</html>
