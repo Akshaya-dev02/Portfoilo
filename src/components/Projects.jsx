@@ -9,7 +9,7 @@ const projects = [
     title: "Portfolio Website",
     description: "Personal portfolio built with React showcasing my projects, skills, and experience.",
     icon: "💻",
-    github: "https://github.com/Akshaya-dev02/Portfolio",
+    github: "https://github.com/Akshaya-dev02/Portfoilo",
     demo: localDemo("portfolio/index.html"),
     techStack: ["React", "Vite", "Portfolio"],
     highlights: ["Single-page experience", "Responsive design", "Project spotlight"],
