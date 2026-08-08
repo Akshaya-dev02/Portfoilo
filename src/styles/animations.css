@@ -1,0 +1,260 @@
+/* Scroll-triggered animations */
+.aos {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.aos.aos-visible {
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-delay: var(--aos-delay, 0ms);
+}
+
+.aos.fade-up.aos-visible { animation-name: aosFadeUp; }
+.aos.fade-down.aos-visible { animation-name: aosFadeDown; }
+.aos.fade-left.aos-visible { animation-name: aosFadeLeft; }
+.aos.fade-right.aos-visible { animation-name: aosFadeRight; }
+.aos.scale-up.aos-visible { animation-name: aosScaleUp; }
+.aos.flip-up.aos-visible { animation-name: aosFlipUp; }
+
+@keyframes aosFadeUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes aosFadeDown {
+  from { opacity: 0; transform: translateY(-36px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes aosFadeLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes aosFadeRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes aosScaleUp {
+  from { opacity: 0; transform: scale(0.88); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes aosFlipUp {
+  from { opacity: 0; transform: perspective(600px) rotateX(12deg) translateY(30px); }
+  to { opacity: 1; transform: perspective(600px) rotateX(0) translateY(0); }
+}
+
+/* Hero page-load animations */
+.hero-animate {
+  opacity: 0;
+  animation: aosFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-d1 { animation-delay: 0.1s; }
+.hero-d2 { animation-delay: 0.25s; }
+.hero-d3 { animation-delay: 0.4s; }
+.hero-d4 { animation-delay: 0.55s; }
+.hero-d5 { animation-delay: 0.7s; }
+.hero-d6 { animation-delay: 0.85s; }
+
+/* Floating background orbs */
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  animation: floatOrb 8s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 300px;
+  height: 300px;
+  background: rgba(99, 102, 241, 0.2);
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 250px;
+  height: 250px;
+  background: rgba(34, 211, 238, 0.15);
+  bottom: 15%;
+  right: 8%;
+  animation-delay: -3s;
+}
+
+.orb-3 {
+  width: 180px;
+  height: 180px;
+  background: rgba(129, 140, 248, 0.18);
+  top: 50%;
+  right: 20%;
+  animation-delay: -5s;
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -25px) scale(1.05); }
+  66% { transform: translate(-15px, 15px) scale(0.95); }
+}
+
+/* Profile gentle float — disabled for side hero layout */
+.home .profile-image {
+  animation: none;
+}
+
+@keyframes profileFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Scroll-down indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-light);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  z-index: 2;
+  animation: aosFadeUp 1s 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+  transition: color 0.3s ease;
+}
+
+.scroll-indicator:hover {
+  color: white;
+}
+
+.scroll-indicator .mouse {
+  width: 22px;
+  height: 34px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-indicator .wheel {
+  width: 3px;
+  height: 8px;
+  background: var(--cyan);
+  border-radius: 2px;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollWheel 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollWheel {
+  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(12px); }
+}
+
+/* Navbar entrance */
+.navbar {
+  animation: navSlideDown 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes navSlideDown {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.navbar.navbar-scrolled {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: rgba(11, 17, 32, 0.95);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Button shimmer on hover */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: none;
+}
+
+.btn-primary:hover::after {
+  animation: btnShimmer 0.6s ease;
+}
+
+@keyframes btnShimmer {
+  from { left: -100%; }
+  to { left: 150%; }
+}
+
+/* Skill card pop */
+.skill-card.aos-visible {
+  animation-name: aosScaleUp;
+  animation-duration: 0.5s;
+}
+
+/* Project icon bounce */
+.project-card:hover .project-icon {
+  animation: iconBounce 0.5s ease;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.15) rotate(-5deg); }
+  70% { transform: scale(0.95) rotate(3deg); }
+}
+
+/* Certificate image reveal */
+.certificate-card img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Form input focus animation handled in Contact.css - add subtle */
+
+/* Footer fade */
+footer {
+  animation: footerGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes footerGlow {
+  from { box-shadow: inset 0 1px 0 rgba(99, 102, 241, 0.1); }
+  to { box-shadow: inset 0 1px 0 rgba(34, 211, 238, 0.2); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .aos,
+  .hero-animate,
+  .scroll-indicator,
+  .navbar,
+  .floating-orb,
+  .profile-image {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .aos.aos-visible {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
